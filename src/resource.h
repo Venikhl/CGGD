@@ -25,6 +25,7 @@ namespace cg
 
 		size_t size_bytes() const;
 		size_t count() const;
+		size_t get_number_of_elements() const;
 		size_t get_stride() const;
 
 	private:
@@ -74,7 +75,11 @@ namespace cg
 	{
 		return data.size();
 	}
-
+	template<typename T>
+	inline size_t resource<T>::get_number_of_elements() const
+	{
+		return data.size();
+	}
 	template<typename T>
 	inline size_t resource<T>::get_stride() const
 	{

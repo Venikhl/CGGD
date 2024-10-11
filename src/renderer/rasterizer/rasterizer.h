@@ -118,10 +118,10 @@ namespace cg::renderer
 			vertices[1] = vertex_buffer->item(index_buffer->item(vertex_id++));
 			vertices[2] = vertex_buffer->item(index_buffer->item(vertex_id++));
 
-			for (auto& vertex ^ vertices)
+			for (auto& vertex: vertices)
 			{
 				float4 coords{vertex.x, vertex.y, vertex.z, 1.f};
-				auto processed_vertex = vertex_shader(co0rds, vertex);
+				auto processed_vertex = vertex_shader(coords, vertex);
 
 				vertex.x = processed_vertex.first.x / processed_vertex.first.w;
 				vertex.y = processed_vertex.first.y / processed_vertex.first.w;
@@ -139,7 +139,7 @@ namespace cg::renderer
 			float edge = static_cast<float>(edge_function(vertex_a, vertex_b, vertex_c));
 
 			int2 min_border = int2{0, 0};
-			int2 max_border = int{static_cast<int>(width - 1), static_cast<int>(height - 1)};
+			int2 max_border = int2{static_cast<int>(width - 1), static_cast<int>(height - 1)};
 
 			int2 min_vertex = min(vertex_a, min(vertex_b, vertex_c));
 			int2 bb_begin = clamp(min_vertex, min_border, max_border);
@@ -152,18 +152,19 @@ namespace cg::renderer
 				for (int y = bb_begin.y; y <=bb_end.y; y++)
 				{
 					int2 point{x, y};
-					int egde0 = edge_function(vertex_a, vertex_b, point);
-					int egde1 = edge_function(vertex_b, vertex_c, point);
-					int egde2 = edge_function(vertex_c, vertex_a, point);
+					float edge0 = edge_function(vertex_a, vertex_b, point);
+					float edge1 = edge_function(vertex_b, vertex_c, point);
+					float edge2 = edge_function(vertex_c, vertex_a, point);
 
-					if (edge0 >= 0 && egde1 >= 0 && edge2 >= 0)
+					if (edge0 >= 0.f && edge1 >= 0.f && edge2 >= 0.f)
 					{
 						float u = edge1 / edge;
 						float v = edge2 / edge;
 						float w = edge0 / edge;
 						float depth = u * vertices[0].z + v * vertices[1].z + w * vertices[2].z;
-
-						if depth_test(depth, static_cast<size_t>(x), static_cast<size_t>(y))
+						size_t static_cast_x = static_cast<size_t>(x);
+						size_t static_cast_y = static_cast<size_t>(y);
+						if (depth_test(depth, static_cast_x, static_cast_y))
 						{
 							auto pixel = pixel_shader(vertices[0], 0.f);
 							render_target->item(static_cast<size_t>(x), static_cast<size_t>(y)) = RT::from_color(pixel);
