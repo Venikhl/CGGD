@@ -9,9 +9,7 @@
 
 using namespace cg::world;
 
-cg::world::camera::camera() : theta(0.f), phi(0.f), height(1080.f), width(1920.f),
-							  aspect_ratio(1920.f / 1080.f), angle_of_view(1.04719f),
-							  z_near(0.001f), z_far(100.f), position(float3{0.f, 0.f, 0.f})
+cg::world::camera::camera() : theta(0.f), phi(0.f), height(1080.f), width(1920.f), aspect_ratio(1920.f / 1080.f), angle_of_view(1.04719f), z_near(0.001f), z_far(100.f), position(float3{0.f, 0.f, 0.f})
 {
 }
 
